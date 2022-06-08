@@ -15,7 +15,7 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.ScreenshotRecorder;
 import net.minecraft.client.util.Window;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,15 +31,15 @@ public class ResolutionControlMod implements ModInitializer {
 	public static final String MOD_NAME = "ResolutionControl+";
 
 	public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-	
+
 	public static Identifier identifier(String path) {
 		return new Identifier(MOD_ID, path);
 	}
-	
+
 	private static final MinecraftClient client = MinecraftClient.getInstance();
-	
+
 	private static ResolutionControlMod instance;
-	
+
 	public static ResolutionControlMod getInstance() {
 		return instance;
 	}
@@ -47,18 +47,18 @@ public class ResolutionControlMod implements ModInitializer {
 	private static final String SCREENSHOT_PREFIX = "fb";
 
 	private boolean optifineInstalled;
-	
+
 	private KeyBinding settingsKey;
 	private KeyBinding screenshotKey;
-	
+
 	private boolean shouldScale = false;
-	
+
 	@Nullable
 	private Framebuffer framebuffer;
 
 	@Nullable
 	private Framebuffer screenshotFrameBuffer;
-	
+
 	@Nullable
 	private Framebuffer clientFramebuffer;
 
@@ -75,11 +75,11 @@ public class ResolutionControlMod implements ModInitializer {
 
 	private int lastWidth;
 	private int lastHeight;
-	
+
 	@Override
 	public void onInitialize() {
 		instance = this;
-		
+
 		settingsKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 				"key.resolutioncontrol.settings",
 				InputUtil.Type.KEYSYM,
@@ -103,7 +103,7 @@ public class ResolutionControlMod implements ModInitializer {
 				if (getOverrideScreenshotScale()) {
 					this.screenshot = true;
 					client.player.sendMessage(
-							new TranslatableText("resolutioncontrol.screenshot.wait"), false);
+							Text.translatable("resolutioncontrol.screenshot.wait"), false);
 				} else {
 					saveScreenshot(framebuffer);
 				}
@@ -132,12 +132,12 @@ public class ResolutionControlMod implements ModInitializer {
 				fb,
 				text -> client.player.sendMessage(text, false));
 	}
-	
+
 	public void setShouldScale(boolean shouldScale) {
 		if (shouldScale == this.shouldScale) return;
 
 //		if (getScaleFactor() == 1) return;
-		
+
 		Window window = getWindow();
 		if (framebuffer == null) {
 			this.shouldScale = true; // so we get the right dimensions
@@ -229,16 +229,16 @@ public class ResolutionControlMod implements ModInitializer {
 				getScreenshotWidth(), getScreenshotHeight()
 		);
 	}
-	
+
 	public float getScaleFactor() {
 		return Config.getInstance().scaleFactor;
 	}
-	
+
 	public void setScaleFactor(float scaleFactor) {
 		Config.getInstance().scaleFactor = scaleFactor;
-		
+
 		updateFramebufferSize();
-		
+
 		ConfigHandler.instance.saveConfig();
 	}
 
@@ -287,7 +287,7 @@ public class ResolutionControlMod implements ModInitializer {
 			setDownscaleAlgorithm(ScalingAlgorithm.NEAREST);
 		}
 	}
-	
+
 	public double getCurrentScaleFactor() {
 		return shouldScale ?
 				Config.getInstance().enableDynamicResolution ?
@@ -369,7 +369,7 @@ public class ResolutionControlMod implements ModInitializer {
 
 
 	}
-	
+
 	public void updateFramebufferSize() {
 		if (framebuffer == null)
 			return;
@@ -393,7 +393,7 @@ public class ResolutionControlMod implements ModInitializer {
 		// Framebuffer uses color (4 x 8 = 32 bit int) and depth (32 bit float)
 		estimatedMemory = (long) currentWidth * currentHeight * 8;
 	}
-	
+
 	public void resize(@Nullable Framebuffer framebuffer) {
 		if (framebuffer == null) return;
 
@@ -414,11 +414,11 @@ public class ResolutionControlMod implements ModInitializer {
 		}
 		shouldScale = prev;
 	}
-	
+
 	private Window getWindow() {
 		return client.getWindow();
 	}
-	
+
 	private void setClientFramebuffer(Framebuffer framebuffer) {
 		client.framebuffer = framebuffer;
 	}

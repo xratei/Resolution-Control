@@ -6,7 +6,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.ArrayUtils;
@@ -24,12 +23,12 @@ public final class MainSettingsScreen extends SettingsScreen {
 
 	private static final double redValue = 2.0;
 
-	private static final Text increaseText = new LiteralText("+");
-	private static final Text decreaseText = new LiteralText("-");
-	private static final Text setText = new LiteralText("S");
-	private static final Text resetText = new LiteralText("R");
-	private static final Text cancelText = new LiteralText("C");
-	
+	private static final Text increaseText = Text.of("+");
+	private static final Text decreaseText = Text.of("-");
+	private static final Text setText = Text.of("S");
+	private static final Text resetText = Text.of("R");
+	private static final Text cancelText = Text.of("C");
+
 	private ButtonWidget increaseButton;
 	private ButtonWidget decreaseButton;
 	private ButtonWidget setButton;
@@ -41,11 +40,11 @@ public final class MainSettingsScreen extends SettingsScreen {
 	private ButtonWidget downscaleAlgoButton;
 
 	private boolean manualEntry = false;
-	
+
 	public MainSettingsScreen(@Nullable Screen parent) {
 		super(text("settings.main"), parent);
 	}
-	
+
 	@Override
 	protected void init() {
 		super.init();
@@ -54,14 +53,14 @@ public final class MainSettingsScreen extends SettingsScreen {
 		int buttonOffset = buttonSize / 2;
 		int buttonY = centerY + 15 - buttonSize / 2;
 		int textFieldSize = 40;
-		
+
 		decreaseButton = new ButtonWidget(
 			centerX - 55 - buttonOffset - buttonSize / 2, buttonY,
 			buttonSize, buttonSize,
 			decreaseText,
 			button -> changeScaleFactor(false));
 		this.addDrawableChild(decreaseButton);
-		
+
 		increaseButton = new ButtonWidget(
 			centerX - 55 + buttonOffset - buttonSize / 2, buttonY,
 			buttonSize, buttonSize,
@@ -97,7 +96,7 @@ public final class MainSettingsScreen extends SettingsScreen {
 
 		entryTextField = new TextFieldWidget(client.textRenderer,
 				centerX - 55 - textFieldSize / 2, centerY - 36,
-				textFieldSize, buttonSize, LiteralText.EMPTY);
+				textFieldSize, buttonSize, Text.of(""));
 		entryTextField.setVisible(false);
 		this.addDrawableChild(entryTextField);
 
@@ -122,7 +121,7 @@ public final class MainSettingsScreen extends SettingsScreen {
 				}
 		);
 		this.addDrawableChild(downscaleAlgoButton);
-		
+
 		updateButtons();
 	}
 
@@ -188,7 +187,7 @@ public final class MainSettingsScreen extends SettingsScreen {
 		entryTextField.tick();
 		super.tick();
 	}
-	
+
 	private void changeScaleFactor(boolean add) {
 		float currentScale = mod.getScaleFactor();
 		int nextIndex = ArrayUtils.indexOf(scaleValues, currentScale);
@@ -210,7 +209,7 @@ public final class MainSettingsScreen extends SettingsScreen {
 
 		updateButtons();
 	}
-	
+
 	private void updateButtons() {
 		increaseButton.active = mod.getScaleFactor() < scaleValues[scaleValues.length - 1];
 		decreaseButton.active = mod.getScaleFactor() > scaleValues[0];
