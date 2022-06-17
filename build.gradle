@@ -6,11 +6,12 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
-archivesBaseName = "${project.archives_base_name}-mc${project.minecraft_version}"
+archivesBaseName = "${project.mod_name}-mc${project.minecraft_version}"
 version = project.mod_version
 group = project.maven_group
 
 loom {
+	mixin.defaultRefmapName = "${project.archives_base_name}.refmap.json"
 	accessWidenerPath = file("src/main/resources/${project.mod_name}.accesswidener")
 }
 
@@ -62,7 +63,7 @@ java {
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
+		rename { "${it}_${project.archives_base_name}"}
 	}
 }
 
